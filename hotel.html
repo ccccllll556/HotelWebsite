@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>澜玥度假酒店 - 海洋共生·诗意栖居</title>
+  <!-- 引入外部资源 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+  
+  <!-- Tailwind 配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#0A2E5C', // 深海蓝（主色）
+            secondary: '#F5F0E6', // 沙滩米（辅助色）
+            accent: '#D4AF37', // 金色（强调色）
+            dark: '#1A3A68', // 深蓝（暗色调）
+            light: '#F9FBFF', // 浅蓝（亮色调）
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            serif: ['Merriweather', 'Georgia', 'serif'],
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.8s ease-in-out',
+            'slide-up': 'slideUp 0.8s ease-out',
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            slideUp: {
+              '0%': { transform: 'translateY(30px)', opacity: '0' },
+              '100%': { transform: 'translateY(0)', opacity: '1' },
+            },
+          },
+        },
+      }
+    }
+  </script>
+  
+  <!-- 自定义工具类 -->
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .text-shadow {
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      .text-shadow-lg {
+        text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      }
+      .bg-blur {
+        backdrop-filter: blur(8px);
+      }
+      .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+      }
+      .mask-gradient {
+        mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+        -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+      }
+    }
+  </style>
+  
+  <style>
+    /* 基础样式 */
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+    .hero-slide {
+      height: 100vh;
+      background-position: center;
+      background-size: cover;
+      transition: opacity 1.2s ease-in-out;
+    }
+    .nav-link {
+      position: relative;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -4px;
+      left: 0;
+      background-color: #D4AF37;
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    .card-hover {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    .btn-primary {
+      background-color: #D4AF37;
+      color: #0A2E5C;
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+      background-color: #c29d2e;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    .btn-outline {
+      border: 2px solid #D4AF37;
+      color: #D4AF37;
+      transition: all 0.3s ease;
+    }
+    .btn-outline:hover {
+      background-color: #D4AF37;
+      color: #0A2E5C;
+    }
+    .gallery-item {
+      overflow: hidden;
+    }
+    .gallery-item img {
+      transition: transform 0.5s ease;
+    }
+    .gallery-item:hover img {
+      transform: scale(1.08);
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -30px;
+      top: 5px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: #D4AF37;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: -24px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background-color: rgba(212, 175, 55, 0.3);
+    }
+  </style>
+</head>
+
+<body class="bg-light text-primary antialiased">
+  <!-- 导航栏 -->
+  <header id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+    <nav class="bg-transparent px-4 md:px-8 py-4 flex items-center justify-between">
+      <div class="flex items-center">
+        <!-- Logo -->
+        <a href="#" class="flex items-center space-x-2">
+          <div class="w-10 h-10 rounded-full bg-accent flex items-center justify-center">
+            <span class="text-primary font-bold text-xl">澜玥</span>
+          </div>
+          <span class="text-white font-bold text-xl md:text-2xl text-shadow-lg hidden md:block">WAVE&MOON</span>
+        </a>
+      </div>
+      
+      <!-- 桌面导航 -->
+      <div class="hidden md:flex items-center space-x-8">
+        <a href="#home" class="nav-link text-white hover:text-accent transition-colors">首页</a>
+        <a href="#about" class="nav-link text-white hover:text-accent transition-colors">关于我们</a>
+        <a href="#rooms" class="nav-link text-white hover:text-accent transition-colors">客房与套房</a>
+        <a href="#dining" class="nav-link text-white hover:text-accent transition-colors">餐饮美食</a>
+        <a href="#activities" class="nav-link text-white hover:text-accent transition-colors">休闲娱乐</a>
+        <a href="#experiences" class="nav-link text-white hover:text-accent transition-colors">特色体验</a>
+        <a href="#contact" class="nav-link text-white hover:text-accent transition-colors">联系我们</a>
+      </div>
+      
+      <!-- 预订按钮 -->
+      <div class="hidden md:block">
+        <a href="#booking" class="btn-primary px-6 py-2 rounded-full font-semibold">立即预订</a>
+      </div>
+      
+      <!-- 移动端菜单按钮 -->
+      <button id="menuBtn" class="md:hidden text-white text-2xl">
+        <i class="fa fa-bars"></i>
+      </button>
+    </nav>
+    
+    <!-- 移动端导航菜单 -->
+    <div id="mobileMenu" class="md:hidden bg-primary/95 bg-blur absolute w-full left-0 top-full transform -translate-y-full opacity-0 transition-all duration-300 pointer-events-none">
+      <div class="flex flex-col p-6 space-y-6">
+        <a href="#home" class="text-white text-lg hover:text-accent transition-colors py-2 border-b border-white/10">首页</a>
+        <a href="#about" class="text-white text-lg hover:text-accent transition-colors py-2 border-b border-white/10">关于我们</a>
+        <a href="#rooms" class="text-white text-lg hover:text-accent transition-colors py-2 border-b border-white/10">客房与套房</a>
+        <a href="#dining" class="text-white text-lg hover:text-accent transition-colors py-2 border-b border-white/10">餐饮美食</a>
+        <a href="#activities" class="text-white text-lg hover:text-accent transition-colors py-2 border-b border-white/10">休闲娱乐</a>
+        <a href="#experiences" class="text-white text-lg hover:text-accent transition-colors py-2 border-b border-white/10">特色体验</a>
+        <a href="#contact" class="text-white text-lg hover:text-accent transition-colors py-2 border-b border-white/10">联系我们</a>
+        <a href="#booking" class="btn-primary px-6 py-3 rounded-full font-semibold text-center">立即预订</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 首页Hero区域（轮播） -->
+  <section id="home" class="relative overflow-hidden">
+    <div class="hero-slider relative h-screen">
+      <!-- 轮播图1：一线海景 -->
+      <div class="hero-slide absolute inset-0 opacity-100" style="background-image: url('https://picsum.photos/id/1036/1920/1080')">
+        <div class="absolute inset-0 bg-primary/40"></div>
+        <div class="container mx-auto h-full flex items-center px-4 md:px-8 relative z-10">
+          <div class="max-w-2xl animate-fade-in">
+            <h1 class="text-[clamp(2.5rem,6vw,4.5rem)] font-bold text-white leading-tight text-shadow-lg mb-4">
+              海洋共生 · 诗意栖居
+            </h1>
+            <p class="text-[clamp(1rem,2vw,1.25rem)] text-white/90 mb-8 max-w-xl text-shadow">
+              三亚海棠湾核心滨海岸线，200米私属纯白沙滩，离尘不离城的奢华度假体验
+            </p>
+            <div class="flex flex-wrap gap-4">
+              <a href="#booking" class="btn-primary px-8 py-3 rounded-full font-semibold text-lg">
+                立即预订
+              </a>
+              <a href="#rooms" class="btn-outline px-8 py-3 rounded-full font-semibold text-lg">
+                探索客房
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 轮播图2：无边泳池 -->
+      <div class="hero-slide absolute inset-0 opacity-0" style="background-image: url('https://picsum.photos/id/1043/1920/1080')">
+        <div class="absolute inset-0 bg-primary/40"></div>
+        <div class="container mx-auto h-full flex items-center px-4 md:px-8 relative z-10">
+          <div class="max-w-2xl animate-fade-in">
+            <h1 class="text-[clamp(2.5rem,6vw,4.5rem)] font-bold text-white leading-tight text-shadow-lg mb-4">
+              无边泳池 · 海天一线
+            </h1>
+            <p class="text-[clamp(1rem,2vw,1.25rem)] text-white/90 mb-8 max-w-xl text-shadow">
+              全季恒温泳池，融合黎族元素与现代设计，尽享山海全景
+            </p>
+            <div class="flex flex-wrap gap-4">
+              <a href="#activities" class="btn-primary px-8 py-3 rounded-full font-semibold text-lg">
+                休闲娱乐
+              </a>
+              <a href="#experiences" class="btn-outline px-8 py-3 rounded-full font-semibold text-lg">
+                特色体验
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 轮播图3：白鲸表演 -->
+      <div class="hero-slide absolute inset-0 opacity-0" style="background-image: url('https://picsum.photos/id/1025/1920/1080')">
+        <div class="absolute inset-0 bg-primary/40"></div>
+        <div class="container mx-auto h-full flex items-center px-4 md:px-8 relative z-10">
+          <div class="max-w-2xl animate-fade-in">
+            <h1 class="text-[clamp(2.5rem,6vw,4.5rem)] font-bold text-white leading-tight text-shadow-lg mb-4">
+              白鲸之约 · 海洋奇遇
+            </h1>
+            <p class="text-[clamp(1rem,2vw,1.25rem)] text-white/90 mb-8 max-w-xl text-shadow">
+              近距离观赏白鲸Tina和Andy的精彩表演，感受海洋精灵的魅力
+            </p>
+            <div class="flex flex-wrap gap-4">
+              <a href="#activities" class="btn-primary px-8 py-3 rounded-full font-semibold text-lg">
+                表演时间
+              </a>
+              <a href="#contact" class="btn-outline px-8 py-3 rounded-full font-semibold text-lg">
+                咨询详情
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 轮播图4：高端客房 -->
+      <div class="hero-slide absolute inset-0 opacity-0" style="background-image: url('https://picsum.photos/id/1048/1920/1080')">
+        <div class="absolute inset-0 bg-primary/40"></div>
+        <div class="container mx-auto h-full flex items-center px-4 md:px-8 relative z-10">
+          <div class="max-w-2xl animate-fade-in">
+            <h1 class="text-[clamp(2.5rem,6vw,4.5rem)] font-bold text-white leading-tight text-shadow-lg mb-4">
+              奢适空间 · 海景相伴
+            </h1>
+            <p class="text-[clamp(1rem,2vw,1.25rem)] text-white/90 mb-8 max-w-xl text-shadow">
+              超大落地窗引入全景海景，考究床品与精致装修，尽享奢华体验
+            </p>
+            <div class="flex flex-wrap gap-4">
+              <a href="#rooms" class="btn-primary px-8 py-3 rounded-full font-semibold text-lg">
+                查看房型
+              </a>
+              <a href="#booking" class="btn-outline px-8 py-3 rounded-full font-semibold text-lg">
+                立即预订
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 轮播控制按钮 -->
+      <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-3 z-20">
+        <button class="slider-dot w-3 h-3 rounded-full bg-white/50 hover:bg-white transition-colors" data-index="0"></button>
+        <button class="slider-dot w-3 h-3 rounded-full bg-white/50 hover:bg-white transition-colors" data-index="1"></button>
+        <button class="slider-dot w-3 h-3 rounded-full bg-white/50 hover:bg-white transition-colors" data-index="2"></button>
+        <button class="slider-dot w-3 h-3 rounded-full bg-white/50 hover:bg-white transition-colors" data-index="3"></button>
+      </div>
+      
+      <!-- 向下滚动箭头 -->
+      <div class="absolute bottom-8 left-8 z-20 animate-pulse-slow">
+        <a href="#about" class="text-white text-3xl opacity-80 hover:opacity-100 transition-opacity">
+          <i class="fa fa-angle-down"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 核心优势摘要 -->
+  <section class="py-20 bg-secondary">
+    <div class="container mx-auto px-4 md:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- 地理位置 -->
+        <div class="bg-white rounded-2xl p-8 shadow-lg card-hover">
+          <div class="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mb-6">
+            <i class="fa fa-map-marker text-primary text-2xl"></i>
+          </div>
+          <h3 class="text-2xl font-bold mb-4">黄金地理位置</h3>
+          <p class="text-gray-600">
+            三亚海棠湾核心滨海岸线，200米私属纯白沙滩，背靠热带雨林，距三亚国际免税城仅8分钟车程。
+          </p>
+        </div>
+        
+        <!-- 设计理念 -->
+        <div class="bg-white rounded-2xl p-8 shadow-lg card-hover">
+          <div class="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mb-6">
+            <i class="fa fa-paint-brush text-primary text-2xl"></i>
+          </div>
+          <h3 class="text-2xl font-bold mb-4">独特设计理念</h3>
+          <p class="text-gray-600">
+            国际顶尖团队设计，融合海南黎锦图腾与现代极简美学，打造自然与奢华并存的居住空间。
+          </p>
+        </div>
+        
+        <!-- 价值体验 -->
+        <div class="bg-white rounded-2xl p-8 shadow-lg card-hover">
+          <div class="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mb-6">
+            <i class="fa fa-star text-primary text-2xl"></i>
+          </div>
+          <h3 class="text-2xl font-bold mb-4">多元价值体验</h3>
+          <p class="text-gray-600">
+            自然共生、奢适体验、多元赋能，满足度假、康养、文化体验等多重需求，打造高端度假目的地。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 关于我们 -->
+  <section id="about" class="py-24 bg-white">
+    <div class="container mx-auto px-4 md:px-8">
+      <div class="flex flex-col md:flex-row items-center gap-12">
+        <div class="md:w-1/2">
+          <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-6 relative inline-block">
+            关于澜玥
+            <span class="absolute -bottom-3 left-0 w-20 h-1 bg-accent"></span>
+          </h2>
+          
+          <!-- 酒店简介 -->
+          <div class="mb-8">
+            <h3 class="text-xl font-semibold mb-4">酒店简介</h3>
+            <p class="text-gray-600 mb-4">
+              "澜玥"之名，"澜"指浪涛，象征海洋的壮阔与灵动；"玥"喻珍珠，代表珍贵与璀璨。LOGO以海浪为设计灵感，线条流畅如海浪起伏，彰显与海洋共生的核心理念。
+            </p>
+            <p class="text-gray-600">
+              酒店选址三亚海棠湾核心滨海岸线，由国际顶尖设计团队倾力打造，融合海南黎锦图腾与现代极简美学，旨在打造集度假、康养、文化体验于一体的高端度假目的地。
+            </p>
+          </div>
+          
+          <!-- 价值理念 -->
+          <div class="mb-8">
+            <h3 class="text-xl font-semibold mb-4">价值理念</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div class="bg-secondary p-4 rounded-lg">
+                <h4 class="font-bold text-primary mb-2">自然共生</h4>
+                <p class="text-sm text-gray-600">依托私属沙滩、海景、雨林，实现人与自然和谐对话</p>
+              </div>
+              <div class="bg-secondary p-4 rounded-lg">
+                <h4 class="font-bold text-primary mb-2">奢适体验</h4>
+                <p class="text-sm text-gray-600">平衡自然静谧与都市便利，提供高端设施与服务</p>
+              </div>
+              <div class="bg-secondary p-4 rounded-lg">
+                <h4 class="font-bold text-primary mb-2">多元赋能</h4>
+                <p class="text-sm text-gray-600">满足度假、康养、文化体验等多重需求</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 酒店大堂 -->
+          <div>
+            <h3 class="text-xl font-semibold mb-4">酒店大堂</h3>
+            <p class="text-gray-600">
+              酒店大堂以现代感与高端质感为设计核心，开阔通透的空间布局，搭配精致家具与自然绿植，营造出与海洋、雨林相融的舒适氛围，让每一位宾客抵达时即感受到奢华与自然的完美平衡。
+            </p>
+          </div>
+        </div>
+        
+        <div class="md:w-1/2 grid grid-cols-2 gap-4">
+          <div class="gallery-item rounded-2xl overflow-hidden h-64 md:h-80">
+            <img src="C:\Users\李永柯\Desktop\蓝月\大.jpg" alt="酒店大堂" class="w-full h-full object-cover">
+          </div>
+          <div class="gallery-item rounded-2xl overflow-hidden h-64 md:h-80 mt-8">
+            <img src="C:\Users\李永柯\Desktop\蓝月\50c128fc1aa171e308ad42ddac295d21.jpg" alt="酒店外观" class="w-full h-full object-cover">
+          </div>
+          <div class="gallery-item rounded-2xl overflow-hidden h-64 md:h-80">
+            <img src="C:\Users\李永柯\Desktop\蓝月\d2217d8d38208c37844025cfc80ea9a7.jpg" alt="黎锦装饰" class="w-full h-full object-cover">
+          </div>
+          <div class="gallery-item rounded-2xl overflow-hidden h-64 md:h-80 mt-8">
+            <img src="C:\Users\李永柯\Desktop\蓝月\085a4c820161f5a0220f4ce6db112283.jpg" alt="酒店园林" class="w-full h-full object-cover">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 客房与套房 -->
+  <section id="rooms" class="py-24 bg-primary/5">
+    <div class="container mx-auto px-4 md:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-4">客房与套房</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">
+          每一间客房都精心设计，将海洋元素与现代奢华完美融合，超大落地窗引入全景海景，让您在房间内即可感受海风拂面的惬意
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- 海景大床房 -->
+        <div class="bg-white rounded-2xl overflow-hidden shadow-lg card-hover">
+          <div class="h-64 overflow-hidden">
+            <img src="C:\Users\李永柯\Desktop\蓝月\da70f167f8f3782e297af7882ef5cda2.jpg" alt="海景大床房" class="w-full h-full object-cover">
+          </div>
+          <div class="p-6">
+            <div class="flex justify-between items-start mb-4">
+              <h3 class="text-xl font-bold">海景大床房</h3>
+              <div class="text-accent font-bold">¥1899/晚</div>
+            </div>
+            <p class="text-gray-600 text-sm mb-6">
+              开阔明亮，超大落地窗引入海景；考究床品；简约大气家具；大理石与海浪纹理地毯；奢华浴室（可观景浴缸、双台盆）。
+            </p>
+            <a href="#booking" class="btn-primary w-full py-2 rounded-full font-semibold text-center block">
+              立即预订
+            </a>
+          </div>
+        </div>
+        
+        <!-- 海景双床房 -->
+        <div class="bg-white rounded-2xl overflow-hidden shadow-lg card-hover">
+          <div class="h-64 overflow-hidden">
+            <img src="C:\Users\李永柯\Desktop\蓝月\858a75b057c7038b1b7fd7ee15e56450.jpg" alt="海景双床房" class="w-full h-full object-cover">
+          </div>
+          <div class="p-6">
+            <div class="flex justify-between items-start mb-4">
+              <h3 class="text-xl font-bold">海景双床房</h3>
+              <div class="text-accent font-bold">¥1899/晚</div>
+            </div>
+            <p class="text-gray-600 text-sm mb-6">
+              开阔明亮，超大落地窗引入海景；考究床品；简约大气家具；大理石与海浪纹理地毯；奢华浴室（可观景浴缸、双台盆）。
+            </p>
+            <a href="#booking" class="btn-primary w-full py-2 rounded-full font-semibold text-center block">
+              立即预订
+            </a>
+          </div>
+        </div>
+        
+        <!-- 尊贵套房 -->
+        <div class="bg-white rounded-2xl overflow-hidden shadow-lg card-hover">
+          <div class="h-64 overflow-hidden">
+            <img src="C:\Users\李永柯\Desktop\蓝月\4f14918f85683149b62ca8e8e4d43c53.jpg" alt="尊贵套房" class="w-full h-full object-cover">
+          </div>
+          <div class="p-6">
+            <div class="flex justify-between items-start mb-4">
+              <h3 class="text-xl font-bold">尊贵套房</h3>
+              <div class="text-accent font-bold">¥2599/晚</div>
+            </div>
+            <p class="text-gray-600 text-sm mb-6">
+              全海景落地窗，功能分区明确（会客、用餐、办公）；现代奢华与海洋元素融合的装修风格，尽享尊贵体验。
+            </p>
+            <a href="#booking" class="btn-primary w-full py-2 rounded-full font-semibold text-center block">
+              立即预订
+            </a>
+          </div>
+        </div>
+        
+        <!-- 海洋亲子房 -->
+        <div class="bg-white rounded-2xl overflow-hidden shadow-lg card-hover">
+          <div class="h-64 overflow-hidden">
+            <img src="C:\Users\李永柯\Desktop\蓝月\22db08c2b7489a373427aa4cafa74d14.jpg" alt="海洋亲子房" class="w-full h-full object-cover">
+          </div>
+          <div class="p-6">
+            <div class="flex justify-between items-start mb-4">
+              <h3 class="text-xl font-bold">海洋亲子房</h3>
+              <div class="text-accent font-bold">¥2999/晚</div>
+            </div>
+            <p class="text-gray-600 text-sm mb-6">
+              蓝色主调，海底世界主题；双层儿童床（带滑梯）、成人床；海洋生物壁画；趣味摇摇马；亲子互动性强。
+            </p>
+            <a href="#booking" class="btn-primary w-full py-2 rounded-full font-semibold text-center block">
+              立即预订
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 客房设施说明 -->
+      <div class="mt-16 bg-white p-8 rounded-2xl shadow-lg">
+        <h3 class="text-xl font-bold mb-6 text-center">所有客房均含以下设施</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 text-center">
+          <div class="flex flex-col items-center">
+            <i class="fa fa-wifi text-primary text-2xl mb-2"></i>
+            <span class="text-sm text-gray-600">高速WiFi</span>
+          </div>
+          <div class="flex flex-col items-center">
+            <i class="fa fa-television text-primary text-2xl mb-2"></i>
+            <span class="text-sm text-gray-600">智能电视</span>
+          </div>
+          <div class="flex flex-col items-center">
+            <i class="fa fa-coffee text-primary text-2xl mb-2"></i>
+            <span class="text-sm text-gray-600">迷你吧台</span>
+          </div>
+          <div class="flex flex-col items-center">
+            <i class="fa fa-bath text-primary text-2xl mb-2"></i>
+            <span class="text-sm text-gray-600">奢华卫浴</span>
+          </div>
+          <div class="flex flex-col items-center">
+            <i class="fa fa-thermometer-half text-primary text-2xl mb-2"></i>
+            <span class="text-sm text-gray-600">独立空调</span>
+          </div>
+          <div class="flex flex-col items-center">
+            <i class="fa fa-suitcase text-primary text-2xl mb-2"></i>
+            <span class="text-sm text-gray-600">保险箱</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 餐饮美食 -->
+  <section id="dining" class="py-24 bg-white">
+    <div class="container mx-auto px-4 md:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-4">餐饮美食</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">
+          融合全球风味与本地特色，在山海之间，为您呈现一场味蕾的奢华盛宴
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <!-- 揽月轩（中餐厅） -->
+        <div class="flex flex-col md:flex-row gap-6">
+          <div class="md:w-1/2 gallery-item rounded-2xl overflow-hidden h-64 md:h-full">
+            <img src="C:\Users\李永柯\Desktop\蓝月\79e877c8e3c60cfa0d95681d9076708b.jpg" alt="揽月轩中餐厅" class="w-full h-full object-cover">
+          </div>
+          <div class="md:w-1/2 flex flex-col justify-center">
+            <h3 class="text-2xl font-bold mb-4">揽月轩 · 中餐厅</h3>
+            <p class="text-gray-600 mb-6">
+              以海南本土菜系为基础，融合粤式经典与创新烹饪手法，选用新鲜本地食材，呈现原汁原味的海南风味。餐厅装修融入黎苗文化元素，环境雅致，适合商务宴请与家庭聚餐。
+            </p>
+            <div class="mb-4">
+              <h4 class="font-semibold mb-2">推荐菜品</h4>
+              <div class="flex flex-wrap gap-2">
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">文昌鸡</span>
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">和乐蟹</span>
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">东山羊</span>
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">加积鸭</span>
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">椰子饭</span>
+              </div>
+            </div>
+            <a href="#contact" class="btn-outline self-start px-6 py-2 rounded-full font-semibold">
+              预订座位
+            </a>
+          </div>
+        </div>
+        
+        <!-- 汐岸（西餐厅） -->
+        <div class="flex flex-col md:flex-row gap-6">
+          <div class="md:w-1/2 gallery-item rounded-2xl overflow-hidden h-64 md:h-full">
+            <img src="C:\Users\李永柯\Desktop\蓝月\d77410e09963c39d2717a5a471f18a00.jpg" alt="汐岸西餐厅" class="w-full h-full object-cover">
+          </div>
+          <div class="md:w-1/2 flex flex-col justify-center">
+            <h3 class="text-2xl font-bold mb-4">汐岸 · 西餐厅</h3>
+            <p class="text-gray-600 mb-6">
+              秉承"海洋馈赠·环球风味"的理念，融合本地海鲜与西式烹饪技艺，为您呈现国际化的美食体验。室内以深海蓝与暖金主调，搭配黎锦装饰；户外临海露台可欣赏无敌海景。
+            </p>
+            <div class="mb-4">
+              <h4 class="font-semibold mb-2">推荐菜品</h4>
+              <div class="flex flex-wrap gap-2">
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">低温慢煮M9和牛肋排</span>
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">香煎法国银鳕鱼</span>
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">波士顿龙虾意面</span>
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">海鲜拼盘</span>
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">椰香芒果舒芙蕾</span>
+              </div>
+            </div>
+            <a href="#contact" class="btn-outline self-start px-6 py-2 rounded-full font-semibold">
+              预订座位
+            </a>
+          </div>
+        </div>
+        
+        <!-- 玥境澜庭（酒吧） -->
+        <div class="flex flex-col md:flex-row gap-6">
+          <div class="md:w-1/2 gallery-item rounded-2xl overflow-hidden h-64 md:h-full">
+            <img src="C:\Users\李永柯\Desktop\蓝月\9dd5eee30291d629437c8f48e00c0623.jpg" alt="玥境澜庭酒吧" class="w-full h-full object-cover">
+          </div>
+          <div class="md:w-1/2 flex flex-col justify-center">
+            <h3 class="text-2xl font-bold mb-4">玥境澜庭 · 酒吧</h3>
+            <p class="text-gray-600 mb-6">
+              以海南本土食材（山兰酒、椰汁等）为基底的创新调酒，搭配炭烤文昌鸡串、咖喱皇鱿鱼等特色轻食。露台可俯瞰沙滩夜景，室内设有星空顶与海浪投影，氛围浪漫迷人。
+            </p>
+            <div class="mb-4">
+              <h4 class="font-semibold mb-2">营业时间</h4>
+              <p class="text-gray-600">17:00 - 01:00</p>
+            </div>
+            <a href="#contact" class="btn-outline self-start px-6 py-2 rounded-full font-semibold">
+              预订座位
+            </a>
+          </div>
+        </div>
+        
+        <!-- 澜岸栖境（咖啡厅） -->
+        <div class="flex flex-col md:flex-row gap-6">
+          <div class="md:w-1/2 gallery-item rounded-2xl overflow-hidden h-64 md:h-full">
+            <img src="C:\Users\李永柯\Desktop\蓝月\5e22aa703f7f4285654dd1929547bdf7.jpg" alt="澜岸栖境咖啡厅" class="w-full h-full object-cover">
+          </div>
+          <div class="md:w-1/2 flex flex-col justify-center">
+            <h3 class="text-2xl font-bold mb-4">澜岸栖境 · 咖啡厅</h3>
+            <p class="text-gray-600 mb-6">
+              隐匿于园林之中，环境清幽雅致。提供精品手冲咖啡、海南特色椰香拿铁、热带水果冰沙等饮品，搭配手工马卡龙、榴莲酥、芒果班戟等精致甜点，是下午茶的理想选择。
+            </p>
+            <div class="mb-4">
+              <h4 class="font-semibold mb-2">推荐饮品</h4>
+              <div class="flex flex-wrap gap-2">
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">椰香拿铁</span>
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">芒果冰沙</span>
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">手冲蓝山</span>
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">荔枝气泡水</span>
+              </div>
+            </div>
+            <a href="#contact" class="btn-outline self-start px-6 py-2 rounded-full font-semibold">
+              预订座位
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 休闲娱乐 -->
+  <section id="activities" class="py-24 bg-primary/5">
+    <div class="container mx-auto px-4 md:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-4">休闲娱乐</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">
+          丰富多样的娱乐设施与活动，让您的度假时光充满乐趣与惊喜
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <!-- 游泳池 -->
+        <div class="bg-white rounded-2xl overflow-hidden shadow-lg">
+          <div class="h-80 overflow-hidden">
+            <img src="C:\Users\李永柯\Desktop\蓝月\b8694ea3deab9e251f9ccd5b9794af55.jpg" alt="无边泳池" class="w-full h-full object-cover">
+          </div>
+          <div class="p-8">
+            <h3 class="text-2xl font-bold mb-4">无边泳池</h3>
+            <p class="text-gray-600 mb-6">
+              无边海景/山景泳池与园林、沙滩无缝联动，分为私人泳池、亲子戏水区（滑梯）、社交泳池吧（漂浮下午茶）等区域。融入黎族元素，配备LED光影与智能喷泉，全季恒温，环保设计。
+            </p>
+            <div class="flex flex-wrap gap-4">
+              <div class="flex items-center">
+                <i class="fa fa-check text-accent mr-2"></i>
+                <span class="text-gray-600">全季恒温</span>
+              </div>
+              <div class="flex items-center">
+                <i class="fa fa-check text-accent mr-2"></i>
+                <span class="text-gray-600">亲子戏水区</span>
+              </div>
+              <div class="flex items-center">
+                <i class="fa fa-check text-accent mr-2"></i>
+                <span class="text-gray-600">漂浮下午茶</span>
+              </div>
+              <div class="flex items-center">
+                <i class="fa fa-check text-accent mr-2"></i>
+                <span class="text-gray-600">LED光影秀</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 健身房 -->
+        <div class="bg-white rounded-2xl overflow-hidden shadow-lg">
+          <div class="h-80 overflow-hidden">
+            <img src="C:\Users\李永柯\Desktop\蓝月\cc1621318594c6bf73841a3001f9123a.jpg" alt="健身房" class="w-full h-full object-cover">
+          </div>
+          <div class="p-8">
+            <h3 class="text-2xl font-bold mb-4">豪华健身房</h3>
+            <p class="text-gray-600 mb-6">
+              落地窗设计，可欣赏山海或城市景观。配备进口高端器械、独立瑜伽室、恒温无边泳池，提供私人教练课程、健康饮品轻食、蒸汽浴、桑拿等服务。
+            </p>
+            <div class="flex flex-wrap gap-4">
+              <div class="flex items-center">
+                <i class="fa fa-check text-accent mr-2"></i>
+                <span class="text-gray-600">进口器械</span>
+              </div>
+              <div class="flex items-center">
+                <i class="fa fa-check text-accent mr-2"></i>
+                <span class="text-gray-600">私人教练</span>
+              </div>
+              <div class="flex items-center">
+                <i class="fa fa-check text-accent mr-2"></i>
+                <span class="text-gray-600">瑜伽室</span>
+              </div>
+              <div class="flex items-center">
+                <i class="fa fa-check text-accent mr-2"></i>
+                <span class="text-gray-600">蒸汽浴/桑拿</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 白鲸表演 -->
+        <div class="bg-white rounded-2xl overflow-hidden shadow-lg">
+          <div class="h-80 overflow-hidden">
+            <img src="C:\Users\李永柯\Desktop\蓝月\cd5b11a04834a717d7a7b217c09613d4.jpg" alt="白鲸表演" class="w-full h-full object-cover">
+          </div>
+          <div class="p-8">
+            <h3 class="text-2xl font-bold mb-4">白鲸表演（珊瑚水族馆）</h3>
+            <p class="text-gray-600 mb-6">
+              可近距离观赏白鲸Tina和Andy的精彩表演，感受海洋精灵的聪明与可爱。入住期间可免费观看，提前了解表演时间，不错过精彩瞬间。
+            </p>
+            
+            <h4 class="font-semibold text-lg mb-3">表演时间表</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <div class="bg-primary/5 p-4 rounded-lg">
+                <h5 class="font-medium mb-2">4月1日-10月7日</h5>
+                <p class="text-gray-600">上午：9:50, 10:50<br>下午：15:00, 16:00, 17:00, 18:00</p>
+              </div>
+              <div class="bg-primary/5 p-4 rounded-lg">
+                <h5 class="font-medium mb-2">12月1日-次年2月28日</h5>
+                <p class="text-gray-600">上午：10:30, 11:30<br>下午：14:00, 15:00, 16:00</p>
+              </div>
+            </div>
+            
+            <div class="flex items-center text-accent font-medium">
+              <i class="fa fa-info-circle mr-2"></i>
+              <span>入住期间免费观看</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 沙滩派对 -->
+        <div class="bg-white rounded-2xl overflow-hidden shadow-lg">
+          <div class="h-80 overflow-hidden">
+            <img src="C:\Users\李永柯\Desktop\蓝月\ac7618049870635e3d1b55a4c5530340.jpg" alt="沙滩派对" class="w-full h-full object-cover">
+          </div>
+          <div class="p-8">
+            <h3 class="text-2xl font-bold mb-4">沙滩派对</h3>
+            <p class="text-gray-600 mb-6">
+              落日时分，在私属沙滩上享受精彩的沙滩派对。乐队驻唱、灯光秀、畅饮啤酒软饮，躺在沙滩躺椅上，感受海风与音乐的完美融合。
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <div class="bg-primary/5 p-4 rounded-lg text-center">
+                <h5 class="font-medium mb-2">活动时间</h5>
+                <p class="text-gray-600">7月1日-10月8日<br>19:00-22:00</p>
+              </div>
+              <div class="bg-primary/5 p-4 rounded-lg text-center">
+                <h5 class="font-medium mb-2">价格</h5>
+                <p class="text-gray-600">¥299/位</p>
+              </div>
+              <div class="bg-primary/5 p-4 rounded-lg text-center">
+                <h5 class="font-medium mb-2">预订须知</h5>
+                <p class="text-gray-600">需提前一日预订</p>
+              </div>
+            </div>
+            
+            <a href="#contact" class="btn-primary px-6 py-2 rounded-full font-semibold inline-block">
+              预订参与
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 特色体验 -->
+  <section id="experiences" class="py-24 bg-white">
+    <div class="container mx-auto px-4 md:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-4">特色体验</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">
+          独特的在地文化与自然探索，为您的旅程增添难忘回忆
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- 海洋秘境探索 -->
+        <div class="bg-primary/5 rounded-2xl overflow-hidden shadow-lg card-hover">
+          <div class="h-64 overflow-hidden">
+            <img src="C:\Users\李永柯\Desktop\蓝月\e16dd457e5bce54d44357d70989c4d36.jpg" alt="海洋秘境探索" class="w-full h-full object-cover">
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-4">海洋秘境探索</h3>
+            <p class="text-gray-600 mb-6">
+              由专业教练带领，探索海棠湾丰富的海洋生态。提供浮潜、深潜、帆船、摩托艇等水上活动，近距离观赏珊瑚礁与热带鱼群，感受海洋的魅力。
+            </p>
+            <div class="mb-4">
+              <h4 class="font-semibold mb-2">活动包含</h4>
+              <ul class="text-gray-600 space-y-2">
+                <li class="flex items-start">
+                  <i class="fa fa-angle-right text-accent mt-1 mr-2"></i>
+                  <span>专业教练指导</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fa fa-angle-right text-accent mt-1 mr-2"></i>
+                  <span>全套装备提供</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fa fa-angle-right text-accent mt-1 mr-2"></i>
+                  <span>安全保障服务</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fa fa-angle-right text-accent mt-1 mr-2"></i>
+                  <span>纪念照片拍摄</span>
+                </li>
+              </ul>
+            </div>
+            <a href="#contact" class="btn-outline w-full py-2 rounded-full font-semibold text-center block">
+              了解详情
+            </a>
+          </div>
+        </div>
+        
+        <!-- 雨林康养之旅 -->
+        <div class="bg-primary/5 rounded-2xl overflow-hidden shadow-lg card-hover">
+          <div class="h-64 overflow-hidden">
+            <img src="C:\Users\李永柯\Desktop\蓝月\6026a616be2d4a81a2be6e0ecbabbabf.jpg" alt="雨林康养之旅" class="w-full h-full object-cover">
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-4">雨林康养之旅</h3>
+            <p class="text-gray-600 mb-6">
+              深入酒店背靠的热带雨林，体验自然康养之旅。包含雨林徒步、植物科普、户外瑜伽、黎族古法SPA等项目，在负氧离子充沛的环境中放松身心。
+            </p>
+            <div class="mb-4">
+              <h4 class="font-semibold mb-2">活动包含</h4>
+              <ul class="text-gray-600 space-y-2">
+                <li class="flex items-start">
+                  <i class="fa fa-angle-right text-accent mt-1 mr-2"></i>
+                  <span>专业向导陪同</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fa fa-angle-right text-accent mt-1 mr-2"></i>
+                  <span>康养SPA体验</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fa fa-angle-right text-accent mt-1 mr-2"></i>
+                  <span>有机养生茶点</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fa fa-angle-right text-accent mt-1 mr-2"></i>
+                  <span>植物精油伴手礼</span>
+                </li>
+              </ul>
+            </div>
+            <a href="#contact" class="btn-outline w-full py-2 rounded-full font-semibold text-center block">
+              了解详情
+            </a>
+          </div>
+        </div>
+        
+        <!-- 黎苗文化沉浸 -->
+        <div class="bg-primary/5 rounded-2xl overflow-hidden shadow-lg card-hover">
+          <div class="h-64 overflow-hidden">
+            <img src="C:\Users\李永柯\Desktop\蓝月\bb5fff83e65acbeb65e36a826fe605a8.jpg" alt="黎苗文化沉浸" class="w-full h-full object-cover">
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-4">黎苗文化沉浸</h3>
+            <p class="text-gray-600 mb-6">
+              深入体验海南本土黎苗文化，参与黎锦制作、竹竿舞学习、黎苗美食烹饪等活动，观看民俗表演，感受少数民族的热情与独特文化魅力。
+            </p>
+            <div class="mb-4">
+              <h4 class="font-semibold mb-2">活动包含</h4>
+              <ul class="text-gray-600 space-y-2">
+                <li class="flex items-start">
+                  <i class="fa fa-angle-right text-accent mt-1 mr-2"></i>
+                  <span>黎锦制作体验</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fa fa-angle-right text-accent mt-1 mr-2"></i>
+                  <span>民俗表演观赏</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fa fa-angle-right text-accent mt-1 mr-2"></i>
+                  <span>黎苗美食品鉴</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fa fa-angle-right text-accent mt-1 mr-2"></i>
+                  <span>文化导师讲解</span>
+                </li>
+              </ul>
+            </div>
+            <a href="#contact" class="btn-outline w-full py-2 rounded-full font-semibold text-center block">
+              了解详情
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 在线预订 -->
+  <section id="booking" class="py-24 bg-primary">
+    <div class="container mx-auto px-4 md:px-8">
+      <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2">
+          <div class="p-8 md:p-12">
+            <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-6">立即预订</h2>
+            <p class="text-gray-600 mb-8">
+              填写以下信息，开启您的奢华度假之旅。我们的客服将在24小时内与您联系确认。
+            </p>
+            
+            <form class="space-y-6">
+              <div>
+                <label for="name" class="block text-gray-700 font-medium mb-2">姓名</label>
+                <input type="text" id="name" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent" placeholder="请输入您的姓名">
+              </div>
+              
+              <div>
+                <label for="phone" class="block text-gray-700 font-medium mb-2">手机号码</label>
+                <input type="tel" id="phone" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent" placeholder="请输入您的手机号码">
+              </div>
+              
+              <div>
+                <label for="email" class="block text-gray-700 font-medium mb-2">电子邮箱</label>
+                <input type="email" id="email" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent" placeholder="请输入您的电子邮箱">
+              </div>
+              
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label for="checkin" class="block text-gray-700 font-medium mb-2">入住日期</label>
+                  <input type="date" id="checkin" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent">
+                </div>
+                <div>
+                  <label for="checkout" class="block text-gray-700 font-medium mb-2">离店日期</label>
+                  <input type="date" id="checkout" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent">
+                </div>
+              </div>
+              
+              <div>
+                <label for="room-type" class="block text-gray-700 font-medium mb-2">选择房型</label>
+                <select id="room-type" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent">
+                  <option value="">请选择房型</option>
+                  <option value="sea-view-king">海景大床房 - ¥1899/晚</option>
+                  <option value="sea-view-twin">海景双床房 - ¥1899/晚</option>
+                  <option value="premium-suite">尊贵套房 - ¥2599/晚</option>
+                  <option value="family-room">海洋亲子房 - ¥2999/晚</option>
+                </select>
+              </div>
+              
+              <div>
+                <label for="guests" class="block text-gray-700 font-medium mb-2">入住人数</label>
+                <select id="guests" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent">
+                  <option value="1">1人</option>
+                  <option value="2">2人</option>
+                  <option value="3">3人</option>
+                  <option value="4">4人</option>
+                  <option value="more">4人以上</option>
+                </select>
+              </div>
+              
+              <div>
+                <label for="special-request" class="block text-gray-700 font-medium mb-2">特殊要求</label>
+                <textarea id="special-request" rows="3" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent" placeholder="请输入您的特殊要求（如：加床、婴儿床、无烟房等）"></textarea>
+              </div>
+              
+              <button type="submit" class="btn-primary w-full py-3 rounded-lg font-semibold text-lg">
+                提交预订
+              </button>
+            </form>
+          </div>
+          
+          <div class="bg-primary relative hidden md:block">
+            <div class="absolute inset-0 bg-[url('https://picsum.photos/id/1048/800/1200')] bg-cover bg-center opacity-30"></div>
+            <div class="relative h-full flex flex-col justify-center p-12 text-white">
+              <h3 class="text-2xl font-bold mb-6">预订须知</h3>
+              
+              <div class="space-y-6">
+                <div class="flex items-start">
+                  <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 mr-4">
+                    <i class="fa fa-calendar text-white"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-semibold mb-1">预订确认</h4>
+                    <p class="text-white/80 text-sm">提交预订后，我们将在24小时内发送确认信息至您的手机或邮箱</p>
+                  </div>
+                </div>
+                
+                <div class="flex items-start">
+                  <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 mr-4">
+                    <i class="fa fa-credit-card text-white"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-semibold mb-1">支付方式</h4>
+                    <p class="text-white/80 text-sm">支持在线支付、银行转账、到店支付等多种支付方式</p>
+                  </div>
+                </div>
+                
+                <div class="flex items-start">
+                  <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 mr-4">
+                    <i class="fa fa-refresh text-white"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-semibold mb-1">取消政策</h4>
+                    <p class="text-white/80 text-sm">入住前72小时可免费取消，72小时内取消将收取首晚房费的50%</p>
+                  </div>
+                </div>
+                
+                <div class="flex items-start">
+                  <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 mr-4">
+                    <i class="fa fa-clock-o text-white"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-semibold mb-1">入住时间</h4>
+                    <p class="text-white/80 text-sm">入住：14:00后 | 离店：12:00前，可提供免费行李寄存服务</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mt-12 p-6 bg-white/10 rounded-xl backdrop-blur-sm">
+                <h4 class="font-semibold mb-4">会员特权</h4>
+                <ul class="space-y-2 text-white/80 text-sm">
+                  <li class="flex items-start">
+                    <i class="fa fa-check text-accent mt-1 mr-2"></i>
+                    <span>会员专享房价折扣</span>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fa fa-check text-accent mt-1 mr-2"></i>
+                    <span>延迟退房至14:00</span>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fa fa-check text-accent mt-1 mr-2"></i>
+                    <span>免费升级房型（视房态而定）</span>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fa fa-check text-accent mt-1 mr-2"></i>
+                    <span>专属欢迎礼遇</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 联系我们 -->
+  <section id="contact" class="py-24 bg-white">
+    <div class="container mx-auto px-4 md:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div>
+          <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-6 relative inline-block">
+            联系我们
+            <span class="absolute -bottom-3 left-0 w-20 h-1 bg-accent"></span>
+          </h2>
+          
+          <p class="text-gray-600 mb-8 max-w-lg">
+            无论您有任何疑问、建议或需求，都可以通过以下方式联系我们，我们将竭诚为您服务。
+          </p>
+          
+          <div class="space-y-6 mb-8">
+            <div class="flex items-start">
+              <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mr-4">
+                <i class="fa fa-map-marker text-primary text-xl"></i>
+              </div>
+              <div>
+                <h4 class="font-semibold text-lg mb-1">酒店地址</h4>
+                <p class="text-gray-600">三亚海棠湾核心滨海岸线</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start">
+              <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mr-4">
+                <i class="fa fa-phone text-primary text-xl"></i>
+              </div>
+              <div>
+                <h4 class="font-semibold text-lg mb-1">预订电话</h4>
+                <p class="text-gray-600">400-888-9999</p>
+                <p class="text-gray-600">+86 898-8888-7777</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start">
+              <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mr-4">
+                <i class="fa fa-envelope text-primary text-xl"></i>
+              </div>
+              <div>
+                <h4 class="font-semibold text-lg mb-1">电子邮箱</h4>
+                <p class="text-gray-600">reservation@lanyuehotel.com</p>
+                <p class="text-gray-600">service@lanyuehotel.com</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start">
+              <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mr-4">
+                <i class="fa fa-weixin text-primary text-xl"></i>
+              </div>
+              <div>
+                <h4 class="font-semibold text-lg mb-1">官方小程序</h4>
+                <p class="text-gray-600">澜玥酒店 WAVE&MOON</p>
+                <div class="mt-2 w-40 h-40 bg-gray-100 rounded-lg flex items-center justify-center">
+                  <span class="text-gray-400 text-sm">小程序二维码</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <h4 class="font-semibold text-lg mb-4">关注我们</h4>
+            <div class="flex space-x-4">
+              <a href="#" class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors">
+                <i class="fa fa-weibo"></i>
+              </a>
+              <a href="#" class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors">
+                <i class="fa fa-weixin"></i>
+              </a>
+              <a href="#" class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors">
+                <i
